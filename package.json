@@ -9,7 +9,9 @@
     "start": "npm run build && npm run serve",
     "build": "npx tsc",
     "jasmine": "jasmine",
-    "test": "npm run build && npm run jasmine",
+    "pretest": "ENV=test db-migrate --env test up",
+    "posttest": "ENV=test db-migrate db:drop test",
+    "test": "npm run build &&  npm run jasmine",
     "serve": "node dist/server.js"
   },
   "author": "Udacity",
@@ -28,8 +30,8 @@
     "@types/express": "^4.17.9",
     "@types/jasmine": "^3.10.18",
     "@types/pg": "^7.14.7",
-    "jasmine": "^3.99.0",
-    "jasmine-spec-reporter": "^6.0.0",
+    "jasmine": "^5.1.0",
+    "jasmine-spec-reporter": "^7.0.0",
     "jasmine-ts": "^0.3.3",
     "ts-node": "^9.1.1",
     "tsc-watch": "^4.2.9"
