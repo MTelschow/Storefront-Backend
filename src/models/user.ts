@@ -2,7 +2,7 @@
 import Client from "../database";
 
 export type User = {
-  id: Number;
+  id?: Number;
   first_name: String;
   last_name: String;
   hash: String;
