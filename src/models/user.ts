@@ -3,31 +3,32 @@ import Client from "../database";
 
 export type User = {
   id: Number;
-  name: String;
-  price: Number;
-  category: String;
+  first_name: String;
+  last_name: String;
+  hash: String;
 };
 
-export class BookStore {
+export class UserStore {
   async index(): Promise<User[]> {
     try {
       // @ts-ignore
       const conn = await Client.connect();
-      const sql = "SELECT * FROM products";
+      const sql = "SELECT * FROM users";
 
       const result = await conn.query(sql);
+      console.log(result);
 
       conn.release();
 
       return result.rows;
     } catch (err) {
-      throw new Error(`Could not get products. Error: ${err}`);
+      throw new Error(`Could not get users. Error: ${err}`);
     }
   }
 
   async show(id: string): Promise<User> {
     try {
-      const sql = "SELECT * FROM products WHERE id=($1)";
+      const sql = "SELECT * FROM users WHERE id=($1)";
       // @ts-ignore
       const conn = await Client.connect();
 
@@ -37,18 +38,18 @@ export class BookStore {
 
       return result.rows[0];
     } catch (err) {
-      throw new Error(`Could not find product ${id}. Error: ${err}`);
+      throw new Error(`Could not find user ${id}. Error: ${err}`);
     }
   }
 
   async create(b: User): Promise<User> {
     try {
       const sql =
-        "INSERT INTO products (name, price, category) VALUES($1, $2, $3) RETURNING *";
+        "INSERT INTO users (first_name, last_name, hash) VALUES($1, $2, $3) RETURNING *";
       // @ts-ignore
       const conn = await Client.connect();
 
-      const result = await conn.query(sql, [b.name, b.price, b.category]);
+      const result = await conn.query(sql, [b.first_name, b.last_name, b.hash]);
 
       const product = result.rows[0];
 
@@ -56,13 +57,15 @@ export class BookStore {
 
       return product;
     } catch (err) {
-      throw new Error(`Could not add new book ${b.name}. Error: ${err}`);
+      throw new Error(
+        `Could not add new user ${b.first_name} ${b.last_name}. Error: ${err}`
+      );
     }
   }
 
   async delete(id: string): Promise<User> {
     try {
-      const sql = "DELETE FROM products WHERE id=($1)";
+      const sql = "DELETE FROM users WHERE id=($1)";
       // @ts-ignore
       const conn = await Client.connect();
 
@@ -74,7 +77,7 @@ export class BookStore {
 
       return product;
     } catch (err) {
-      throw new Error(`Could not delete product ${id}. Error: ${err}`);
+      throw new Error(`Could not delete user ${id}. Error: ${err}`);
     }
   }
 }
