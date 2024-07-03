@@ -16,7 +16,6 @@ export class UserStore {
       const sql = "SELECT * FROM users";
 
       const result = await conn.query(sql);
-      console.log(result);
 
       conn.release();
 

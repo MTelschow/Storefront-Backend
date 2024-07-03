@@ -8,10 +8,7 @@
     "tsc": "tsc",
     "start": "npm run build && npm run serve",
     "build": "npx tsc",
-    "jasmine": "jasmine",
-    "pretest": "ENV=test db-migrate --env test up",
-    "posttest": "ENV=test db-migrate db:drop test",
-    "test": "npm run build &&  npm run jasmine",
+    "test": "npm run build && db-migrate --env test up && ENV=test jasmine && db-migrate db:drop test",
     "serve": "node dist/server.js"
   },
   "author": "Udacity",
