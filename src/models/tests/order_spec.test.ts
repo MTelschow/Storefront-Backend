@@ -6,7 +6,7 @@ const store = new OrderStore();
 const userStore = new UserStore();
 
 let testOrder: Order = {
-  user_id: 0,
+  user_id: NaN,
   status: "active",
 };
 
@@ -20,10 +20,6 @@ describe("Order Model", () => {
   beforeAll(async () => {
     testUser = await userStore.create(testUser);
     testOrder.user_id = testUser.id as number;
-  });
-
-  afterAll(async () => {
-    await userStore.show(testUser.id as number);
   });
 
   beforeEach(async () => {
