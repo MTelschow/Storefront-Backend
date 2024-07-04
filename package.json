@@ -8,7 +8,7 @@
     "tsc": "tsc",
     "start": "npm run build && npm run serve",
     "build": "npx tsc",
-    "test": "npm run build && db-migrate --env test up && ENV=test jasmine && db-migrate db:drop test",
+    "test": "npx tsc && db-migrate --env test up && ENV=test jasmine && db-migrate --env test reset",
     "serve": "node dist/server.js"
   },
   "author": "Udacity",
