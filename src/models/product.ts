@@ -4,7 +4,7 @@ import Client from "../database";
 export type Product = {
   id?: Number;
   name: String;
-  price: Number;
+  price: String;
   category: String;
 };
 
@@ -25,7 +25,7 @@ export class ProductStore {
     }
   }
 
-  async show(id: string): Promise<Product> {
+  async show(id: number): Promise<Product> {
     try {
       const sql = "SELECT * FROM products WHERE id=($1)";
       // @ts-ignore
@@ -57,6 +57,32 @@ export class ProductStore {
       return product;
     } catch (err) {
       throw new Error(`Could not add new book ${b.name}. Error: ${err}`);
+    }
+  }
+
+  async update(id: number, updatedProduct: Product): Promise<Product> {
+    try {
+      const sql = "UPDATE products SET name = $1, price = $2, category = $3 WHERE id = $4 RETURNING *";
+      // @ts-ignore
+      const conn = await Client.connect();
+      const result = await conn.query(sql, [updatedProduct.name, updatedProduct.price, updatedProduct.category, id]);
+      const product = result.rows[0];
+      conn.release();
+      return product;
+    } catch (err) {
+      throw new Error(`Could not update product ${id}. Error: ${err}`);
+    }
+  }
+
+  async delete(id: number): Promise<void> {
+    try {
+      const sql = "DELETE FROM products WHERE id = $1";
+      // @ts-ignore
+      const conn = await Client.connect();
+      await conn.query(sql, [id]);
+      conn.release();
+    } catch (err) {
+      throw new Error(`Could not delete product ${id}. Error: ${err}`);
     }
   }
 }
