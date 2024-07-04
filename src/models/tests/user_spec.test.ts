@@ -1,0 +1,75 @@
+import { User, UserStore } from "../user";
+
+const store = new UserStore();
+
+let testUser: User = {
+  first_name: "Test",
+  last_name: "User",
+  hash: "12345",
+};
+
+describe("User Model", () => {
+  beforeEach(async () => {
+    testUser = await store.create(testUser);
+  });
+
+  afterEach(async () => {
+    const testUserExists = await store.show(testUser.id as number);
+    if (testUserExists != undefined) await store.delete(testUser.id as number);
+  });
+
+  it("should have index method", () => {
+    expect(store.index).toBeDefined();
+  });
+
+  it("should have create method", () => {
+    expect(store.create).toBeDefined();
+  });
+
+  it("should have show method", () => {
+    expect(store.show).toBeDefined();
+  });
+
+  it("should have delete method", () => {
+    expect(store.delete).toBeDefined();
+  });
+
+  it("create method should add a user", async () => {
+    const result = await store.create(testUser);
+    expect(result).toEqual(
+      jasmine.objectContaining({
+        first_name: testUser.first_name,
+        last_name: testUser.last_name,
+        hash: testUser.hash,
+      })
+    );
+  });
+
+  it("index method should return a list of users", async () => {
+    const result = await store.index();
+    expect(result).toContain(jasmine.objectContaining(testUser));
+  });
+
+  it("show method should return the correct user", async () => {
+    const result = await store.show(testUser.id as number);
+    expect(result).toEqual(testUser);
+  });
+
+  it("update method should update the user", async () => {
+    const updatedUser = {
+      ...testUser,
+      first_name: "NewJane",
+      last_name: "NewDoe",
+      hash: "newpassword123",
+    };
+
+    const result = await store.update(updatedUser.id as number, updatedUser);
+    expect(result).toEqual(updatedUser);
+  });
+
+  it("delete method should remove the user", async () => {
+    await store.delete(testUser.id as number);
+    const result = await store.show(testUser.id as number);
+    expect(result).toBeUndefined();
+  });
+});
