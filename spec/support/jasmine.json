@@ -12,5 +12,5 @@
     }
   ],
   "stopSpecOnExpectationFailure": false,
-  "random": false
+  "random": true
 }
