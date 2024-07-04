@@ -8,7 +8,7 @@ export type OrderItem = {
   quantity: Number;
 };
 
-export class OrderStore {
+export class OrderItemStore {
   async index(): Promise<OrderItem[]> {
     try {
       // @ts-ignore
@@ -16,7 +16,6 @@ export class OrderStore {
       const sql = "SELECT * FROM order_items";
 
       const result = await conn.query(sql);
-      console.log(result);
 
       conn.release();
 
@@ -87,7 +86,7 @@ export class OrderStore {
     }
   }
 
-  async delete(id: string): Promise<OrderItem> {
+  async delete(id: number): Promise<OrderItem> {
     try {
       const sql = "DELETE FROM order_items WHERE id=($1)";
       // @ts-ignore
