@@ -4,7 +4,7 @@ import Client from "../database";
 export type Order = {
   id?: Number;
   user_id: Number;
-  status: "active" | "completed";
+  status: "active" | "complete";
 };
 
 export class OrderStore {

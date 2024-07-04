@@ -80,7 +80,7 @@ describe("Order Model", () => {
     const updatedOrder: Order = {
       id: testOrder.id,
       user_id: testOrder.user_id,
-      status: "completed",
+      status: "complete",
     };
 
     const result = await store.update(testOrder.id as number, updatedOrder);
