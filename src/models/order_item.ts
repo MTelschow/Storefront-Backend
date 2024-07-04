@@ -26,7 +26,7 @@ export class OrderStore {
     }
   }
 
-  async show(id: string): Promise<OrderItem> {
+  async show(id: number): Promise<OrderItem> {
     try {
       const sql = "SELECT * FROM order_items WHERE id=($1)";
       // @ts-ignore
@@ -64,6 +64,26 @@ export class OrderStore {
       throw new Error(
         `Could not add new order item ${order_item.id}. Error: ${err}`
       );
+    }
+  }
+
+  async update(id: number, order_item: OrderItem): Promise<OrderItem> {
+    try {
+      const sql =
+        "UPDATE order_items SET order_id=($1), product_id=($2), quantity=($3) WHERE id=($4) RETURNING *";
+      // @ts-ignore
+      const conn = await Client.connect();
+      const result = await conn.query(sql, [
+        order_item.order_id,
+        order_item.product_id,
+        order_item.quantity,
+        id,
+      ]);
+      const updatedOrderItem = result.rows[0];
+      conn.release();
+      return updatedOrderItem;
+    } catch (err) {
+      throw new Error(`Could not update order item ${id}. Error: ${err}`);
     }
   }
 

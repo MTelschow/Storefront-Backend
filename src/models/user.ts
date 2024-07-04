@@ -25,7 +25,7 @@ export class UserStore {
     }
   }
 
-  async show(id: string): Promise<User> {
+  async show(id: number): Promise<User> {
     try {
       const sql = "SELECT * FROM users WHERE id=($1)";
       // @ts-ignore
@@ -62,7 +62,23 @@ export class UserStore {
     }
   }
 
-  async delete(id: string): Promise<User> {
+  async update(id: number, updates: User): Promise<User> {
+    try {
+      const { first_name, last_name, hash } = updates;
+      const sql =
+        "UPDATE users SET first_name=($1), last_name=($2), hash=($3) WHERE id=($4) RETURNING *";
+      // @ts-ignore
+      const conn = await Client.connect();
+      const result = await conn.query(sql, [first_name, last_name, hash, id]);
+      const user = result.rows[0];
+      conn.release();
+      return user;
+    } catch (err) {
+      throw new Error(`Could not update user ${id}. Error: ${err}`);
+    }
+  }
+
+  async delete(id: number): Promise<User> {
     try {
       const sql = "DELETE FROM users WHERE id=($1)";
       // @ts-ignore
