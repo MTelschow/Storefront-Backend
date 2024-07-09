@@ -1,14 +1,12 @@
-import express, { Request, Response } from "express";
+import express, { Application } from "express";
 import bodyParser from "body-parser";
-import dotenv from "dotenv";
 import cors from "cors";
 import user_routes from "./handlers/users";
 import product_routes from "./handlers/product";
+import { PORT } from "./utils/env";
+import { application } from "express";
 
-dotenv.config();
-
-const app: express.Application = express();
-const port = process.env.PORT;
+const app: Application = express();
 
 const corsOptions = {
   origin: process.env.CORSE_ORIGIN,
@@ -21,6 +19,6 @@ app.use(bodyParser.json());
 user_routes(app);
 product_routes(app);
 
-app.listen(port, function () {
-  console.log(`starting app at:  localhost:${port}`);
+app.listen(PORT, function () {
+  console.log(`starting app at:  localhost:${PORT}`);
 });
