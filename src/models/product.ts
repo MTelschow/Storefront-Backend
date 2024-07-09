@@ -62,10 +62,16 @@ export class ProductStore {
 
   async update(id: number, updatedProduct: Product): Promise<Product> {
     try {
-      const sql = "UPDATE products SET name = $1, price = $2, category = $3 WHERE id = $4 RETURNING *";
+      const sql =
+        "UPDATE products SET name = $1, price = $2, category = $3 WHERE id = $4 RETURNING *";
       // @ts-ignore
       const conn = await Client.connect();
-      const result = await conn.query(sql, [updatedProduct.name, updatedProduct.price, updatedProduct.category, id]);
+      const result = await conn.query(sql, [
+        updatedProduct.name,
+        updatedProduct.price,
+        updatedProduct.category,
+        id,
+      ]);
       const product = result.rows[0];
       conn.release();
       return product;
@@ -74,13 +80,19 @@ export class ProductStore {
     }
   }
 
-  async delete(id: number): Promise<void> {
+  async delete(id: number): Promise<Product> {
     try {
-      const sql = "DELETE FROM products WHERE id = $1";
+      const sql = "DELETE FROM products WHERE id = $1 RETURNING *";
       // @ts-ignore
       const conn = await Client.connect();
-      await conn.query(sql, [id]);
+
+      const result = await conn.query(sql, [id]);
+
+      const product = result.rows[0];
+
       conn.release();
+
+      return product;
     } catch (err) {
       throw new Error(`Could not delete product ${id}. Error: ${err}`);
     }

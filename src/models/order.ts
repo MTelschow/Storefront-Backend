@@ -80,7 +80,7 @@ export class OrderStore {
 
   async delete(id: number): Promise<Order> {
     try {
-      const sql = "DELETE FROM orders WHERE id=($1)";
+      const sql = "DELETE FROM orders WHERE id=($1) RETURNING *";
       // @ts-ignore
       const conn = await Client.connect();
 
