@@ -13,23 +13,26 @@ let testOrder: Order = {
 let testUser: User = {
   first_name: "John",
   last_name: "Doe",
-  hash: "password123",
+  password_digest: "password123",
 };
 
 describe("Order Model", () => {
   beforeAll(async () => {
     testUser = await userStore.create(testUser);
+    console.log(testUser);
     testOrder.user_id = testUser.id as number;
   });
 
   beforeEach(async () => {
+    console.log(testOrder.user_id, await userStore.show(testOrder.user_id as number));
     testOrder = await store.create(testOrder);
+    console.log(testOrder);
   });
 
   afterEach(async () => {
-    const testUserExists = await store.delete(testOrder.id as number);
-    if (testUserExists != undefined)
-      await userStore.delete(testUser.id as number);
+    const testOrderExists = await store.delete(testOrder.id as number);
+    if (testOrderExists != undefined)
+      await store.delete(testOrder.id as number);
   });
 
   it("should have index method", () => {

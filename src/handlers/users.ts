@@ -34,7 +34,7 @@ const create = async(req: Request, res: Response) => {
     const newUser: User = {
       first_name,
       last_name,
-      hash: password,
+      password_digest: password,
     };
     const createdUser = await store.create(newUser);
     res.json(createdUser);
@@ -52,7 +52,7 @@ const update = async (req: Request, res: Response) => {
       id: Number(id),
       first_name,
       last_name,
-      hash: password,
+      password_digest: password,
     };
     const updated = await store.update(Number(id), updatedUser);
     if (!updated) {

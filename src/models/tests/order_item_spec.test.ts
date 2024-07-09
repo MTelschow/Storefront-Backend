@@ -22,7 +22,7 @@ let testOrder: Order = {
 let testUser: User = {
   first_name: "John",
   last_name: "Doe",
-  hash: "password123",
+  password_digest: "password123",
 };
 
 let testProduct: Product = {

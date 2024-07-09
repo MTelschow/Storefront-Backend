@@ -5,7 +5,7 @@ export type User = {
   id?: Number;
   first_name: String;
   last_name: String;
-  hash: String;
+  password_digest: String;
 };
 
 export class UserStore {
@@ -44,11 +44,11 @@ export class UserStore {
   async create(b: User): Promise<User> {
     try {
       const sql =
-        "INSERT INTO users (first_name, last_name, hash) VALUES($1, $2, $3) RETURNING *";
+        "INSERT INTO users (first_name, last_name, password_digest) VALUES($1, $2, $3) RETURNING *";
       // @ts-ignore
       const conn = await Client.connect();
 
-      const result = await conn.query(sql, [b.first_name, b.last_name, b.hash]);
+      const result = await conn.query(sql, [b.first_name, b.last_name, b.password_digest]);
 
       const product = result.rows[0];
 
@@ -64,12 +64,12 @@ export class UserStore {
 
   async update(id: number, updates: User): Promise<User> {
     try {
-      const { first_name, last_name, hash } = updates;
+      const { first_name, last_name, password_digest } = updates;
       const sql =
-        "UPDATE users SET first_name=($1), last_name=($2), hash=($3) WHERE id=($4) RETURNING *";
+        "UPDATE users SET first_name=($1), last_name=($2), password_digest=($3) WHERE id=($4) RETURNING *";
       // @ts-ignore
       const conn = await Client.connect();
-      const result = await conn.query(sql, [first_name, last_name, hash, id]);
+      const result = await conn.query(sql, [first_name, last_name, password_digest, id]);
       const user = result.rows[0];
       conn.release();
       return user;

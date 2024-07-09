@@ -5,7 +5,7 @@ const store = new UserStore();
 let testUser: User = {
   first_name: "Test",
   last_name: "User",
-  hash: "12345",
+  password_digest: "12345",
 };
 
 describe("User Model", () => {
@@ -40,7 +40,7 @@ describe("User Model", () => {
       jasmine.objectContaining({
         first_name: testUser.first_name,
         last_name: testUser.last_name,
-        hash: testUser.hash,
+        password_digest: testUser.password_digest,
       })
     );
   });
@@ -60,7 +60,7 @@ describe("User Model", () => {
       ...testUser,
       first_name: "NewJane",
       last_name: "NewDoe",
-      hash: "newpassword123",
+      password_digest: "newpassword123",
     };
 
     const result = await store.update(updatedUser.id as number, updatedUser);
