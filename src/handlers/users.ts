@@ -1,6 +1,5 @@
 import { Request, Response, Application } from "express";
-import {  NewUser, UserStore } from "../models/user";
-
+import { NewUser, UserStore } from "../models/user";
 
 const store = new UserStore();
 
@@ -14,7 +13,7 @@ const index = async (_req: Request, res: Response) => {
   }
 };
 
-const show = async(req: Request, res: Response) => {
+const show = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const user = await store.show(Number(id));
@@ -29,7 +28,7 @@ const show = async(req: Request, res: Response) => {
   }
 };
 
-const create = async(req: Request, res: Response) => {
+const create = async (req: Request, res: Response) => {
   try {
     const { first_name, last_name, password } = req.body;
     const newUser: NewUser = {
@@ -82,13 +81,12 @@ const remove = async (req: Request, res: Response) => {
   }
 };
 
-
 const user_routes = (app: Application) => {
   app.get("/users", index);
   app.get("/users/:id", show);
   app.post("/users", create);
-  app.put('/users/:id', update)
-  app.delete('/users/:id', remove);
+  app.put("/users/:id", update);
+  app.delete("/users/:id", remove);
 };
 
 export default user_routes;

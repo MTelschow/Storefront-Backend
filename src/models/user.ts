@@ -10,11 +10,11 @@ export type User = {
 };
 
 export type NewUser = {
-  id?: Number,
+  id?: Number;
   first_name: String;
   last_name: String;
-  password: String
-}
+  password: String;
+};
 
 export class UserStore {
   async index(): Promise<User[]> {
@@ -52,7 +52,7 @@ export class UserStore {
   async create(newUser: NewUser): Promise<User> {
     try {
       const { first_name, last_name, password } = newUser;
-      
+
       const hash = hashPassword(password);
 
       const sql =
@@ -68,9 +68,7 @@ export class UserStore {
 
       return product;
     } catch (err) {
-      throw new Error(
-        `Could not add new user. Error: ${err}`
-      );
+      throw new Error(`Could not add new user. Error: ${err}`);
     }
   }
 

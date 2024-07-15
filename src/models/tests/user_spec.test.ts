@@ -38,7 +38,7 @@ describe("User Model", () => {
 
   it("create method should add a user", async () => {
     const result = await store.create(newTestUser);
-    
+
     expect(result).toEqual(
       jasmine.objectContaining({
         first_name: testUser.first_name,
@@ -49,8 +49,10 @@ describe("User Model", () => {
 
   it("create method should hash password", async () => {
     const result = await store.create(newTestUser);
-    
-    expect(matchPassword(newTestUser.password, result.password_digest)).toBeTruthy();
+
+    expect(
+      matchPassword(newTestUser.password, result.password_digest)
+    ).toBeTruthy();
   });
 
   it("index method should return a list of users", async () => {
