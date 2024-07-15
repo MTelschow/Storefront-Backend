@@ -1,5 +1,6 @@
 import { Request, Response, Application } from "express";
-import { User, UserStore } from "../models/user";
+import {  NewUser, UserStore } from "../models/user";
+
 
 const store = new UserStore();
 
@@ -31,10 +32,10 @@ const show = async(req: Request, res: Response) => {
 const create = async(req: Request, res: Response) => {
   try {
     const { first_name, last_name, password } = req.body;
-    const newUser: User = {
+    const newUser: NewUser = {
       first_name,
       last_name,
-      password_digest: password,
+      password: password,
     };
     const createdUser = await store.create(newUser);
     res.json(createdUser);
@@ -48,11 +49,11 @@ const update = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { first_name, last_name, password } = req.body;
-    const updatedUser: User = {
+    const updatedUser: NewUser = {
       id: Number(id),
       first_name,
       last_name,
-      password_digest: password,
+      password: password,
     };
     const updated = await store.update(Number(id), updatedUser);
     if (!updated) {

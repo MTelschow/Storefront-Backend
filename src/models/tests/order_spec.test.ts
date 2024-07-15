@@ -1,5 +1,5 @@
 import { Order, OrderStore } from "../order";
-import { User, UserStore } from "../user";
+import { NewUser, User, UserStore } from "../user";
 
 const store = new OrderStore();
 
@@ -10,23 +10,22 @@ let testOrder: Order = {
   status: "active",
 };
 
-let testUser: User = {
+const newTestUser: NewUser = {
   first_name: "John",
   last_name: "Doe",
-  password_digest: "password123",
+  password: "password123",
 };
+
+let testUser: User;
 
 describe("Order Model", () => {
   beforeAll(async () => {
-    testUser = await userStore.create(testUser);
-    console.log(testUser);
+    testUser = await userStore.create(newTestUser);
     testOrder.user_id = testUser.id as number;
   });
 
   beforeEach(async () => {
-    console.log(testOrder.user_id, await userStore.show(testOrder.user_id as number));
     testOrder = await store.create(testOrder);
-    console.log(testOrder);
   });
 
   afterEach(async () => {

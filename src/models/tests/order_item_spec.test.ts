@@ -1,6 +1,6 @@
 import { OrderItem, OrderItemStore } from "../order_item";
 import { Order, OrderStore } from "../order";
-import { User, UserStore } from "../user";
+import { NewUser, User, UserStore } from "../user";
 import { Product, ProductStore } from "../product";
 
 const store = new OrderItemStore();
@@ -19,11 +19,13 @@ let testOrder: Order = {
   status: "active",
 };
 
-let testUser: User = {
+const newTestUser: NewUser = {
   first_name: "John",
   last_name: "Doe",
-  password_digest: "password123",
+  password: "password123",
 };
+
+let testUser: User;
 
 let testProduct: Product = {
   name: "Test Name",
@@ -34,7 +36,7 @@ let testProduct: Product = {
 describe("Order Item Model", () => {
   beforeAll(async () => {
     testProduct = await productStore.create(testProduct);
-    testUser = await userStore.create(testUser);
+    testUser = await userStore.create(newTestUser);
     testOrder.user_id = testUser.id as number;
     testOrder = await orderStore.create(testOrder);
 

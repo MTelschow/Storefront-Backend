@@ -1,12 +1,20 @@
 // @ts-ignore
 import Client from "../database";
+import { hashPassword, matchPassword } from "../utils/hashing";
 
 export type User = {
-  id?: Number;
+  id: Number;
   first_name: String;
   last_name: String;
   password_digest: String;
 };
+
+export type NewUser = {
+  id?: Number,
+  first_name: String;
+  last_name: String;
+  password: String
+}
 
 export class UserStore {
   async index(): Promise<User[]> {
@@ -41,14 +49,18 @@ export class UserStore {
     }
   }
 
-  async create(b: User): Promise<User> {
+  async create(newUser: NewUser): Promise<User> {
     try {
+      const { first_name, last_name, password } = newUser;
+      
+      const hash = hashPassword(password);
+
       const sql =
         "INSERT INTO users (first_name, last_name, password_digest) VALUES($1, $2, $3) RETURNING *";
       // @ts-ignore
       const conn = await Client.connect();
 
-      const result = await conn.query(sql, [b.first_name, b.last_name, b.password_digest]);
+      const result = await conn.query(sql, [first_name, last_name, hash]);
 
       const product = result.rows[0];
 
@@ -57,19 +69,22 @@ export class UserStore {
       return product;
     } catch (err) {
       throw new Error(
-        `Could not add new user ${b.first_name} ${b.last_name}. Error: ${err}`
+        `Could not add new user. Error: ${err}`
       );
     }
   }
 
-  async update(id: number, updates: User): Promise<User> {
+  async update(id: number, updates: NewUser): Promise<User> {
     try {
-      const { first_name, last_name, password_digest } = updates;
+      const { first_name, last_name, password } = updates;
+
+      const hash = hashPassword(password);
+
       const sql =
         "UPDATE users SET first_name=($1), last_name=($2), password_digest=($3) WHERE id=($4) RETURNING *";
       // @ts-ignore
       const conn = await Client.connect();
-      const result = await conn.query(sql, [first_name, last_name, password_digest, id]);
+      const result = await conn.query(sql, [first_name, last_name, hash, id]);
       const user = result.rows[0];
       conn.release();
       return user;
