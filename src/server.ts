@@ -4,7 +4,6 @@ import cors from "cors";
 import user_routes from "./handlers/users";
 import product_routes from "./handlers/product";
 import { PORT } from "./utils/env";
-import { application } from "express";
 
 const app: Application = express();
 

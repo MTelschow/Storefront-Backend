@@ -1,25 +1,23 @@
-// @ts-ignore
 import Client from "../database";
-import { hashPassword, matchPassword } from "../utils/hashing";
+import { hashPassword } from "../utils/hashing";
 
 export type User = {
-  id: Number;
-  first_name: String;
-  last_name: String;
-  password_digest: String;
+  id: number;
+  first_name: string;
+  last_name: string;
+  password_digest: string;
 };
 
 export type NewUser = {
-  id?: Number;
-  first_name: String;
-  last_name: String;
-  password: String;
+  id?: number;
+  first_name: string;
+  last_name: string;
+  password: string;
 };
 
 export class UserStore {
   async index(): Promise<User[]> {
     try {
-      // @ts-ignore
       const conn = await Client.connect();
       const sql = "SELECT * FROM users";
 
@@ -36,7 +34,7 @@ export class UserStore {
   async show(id: number): Promise<User> {
     try {
       const sql = "SELECT * FROM users WHERE id=($1)";
-      // @ts-ignore
+
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [id]);
@@ -57,7 +55,7 @@ export class UserStore {
 
       const sql =
         "INSERT INTO users (first_name, last_name, password_digest) VALUES($1, $2, $3) RETURNING *";
-      // @ts-ignore
+
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [first_name, last_name, hash]);
@@ -80,7 +78,7 @@ export class UserStore {
 
       const sql =
         "UPDATE users SET first_name=($1), last_name=($2), password_digest=($3) WHERE id=($4) RETURNING *";
-      // @ts-ignore
+
       const conn = await Client.connect();
       const result = await conn.query(sql, [first_name, last_name, hash, id]);
       const user = result.rows[0];
@@ -94,7 +92,7 @@ export class UserStore {
   async delete(id: number): Promise<User> {
     try {
       const sql = "DELETE FROM users WHERE id=($1) RETURNING *";
-      // @ts-ignore
+
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [id]);

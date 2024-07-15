@@ -1,17 +1,15 @@
-// @ts-ignore
 import Client from "../database";
 
 export type OrderItem = {
-  id?: Number;
-  order_id: Number;
-  product_id: Number;
-  quantity: Number;
+  id?: number;
+  order_id: number;
+  product_id: number;
+  quantity: number;
 };
 
 export class OrderItemStore {
   async index(): Promise<OrderItem[]> {
     try {
-      // @ts-ignore
       const conn = await Client.connect();
       const sql = "SELECT * FROM order_items";
 
@@ -28,7 +26,7 @@ export class OrderItemStore {
   async show(id: number): Promise<OrderItem> {
     try {
       const sql = "SELECT * FROM order_items WHERE id=($1)";
-      // @ts-ignore
+
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [id]);
@@ -45,7 +43,7 @@ export class OrderItemStore {
     try {
       const sql =
         "INSERT INTO order_items (order_id, product_id, quantity) VALUES($1, $2, $3) RETURNING *";
-      // @ts-ignore
+
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [
@@ -70,7 +68,7 @@ export class OrderItemStore {
     try {
       const sql =
         "UPDATE order_items SET order_id=($1), product_id=($2), quantity=($3) WHERE id=($4) RETURNING *";
-      // @ts-ignore
+
       const conn = await Client.connect();
       const result = await conn.query(sql, [
         order_item.order_id,
@@ -89,7 +87,7 @@ export class OrderItemStore {
   async delete(id: number): Promise<OrderItem> {
     try {
       const sql = "DELETE FROM order_items WHERE id=($1) RETURNING *";
-      // @ts-ignore
+
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [id]);

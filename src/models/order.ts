@@ -1,16 +1,14 @@
-// @ts-ignore
 import Client from "../database";
 
 export type Order = {
-  id?: Number;
-  user_id: Number;
+  id?: number;
+  user_id: number;
   status: "active" | "complete";
 };
 
 export class OrderStore {
   async index(): Promise<Order[]> {
     try {
-      // @ts-ignore
       const conn = await Client.connect();
       const sql = "SELECT * FROM orders";
 
@@ -27,7 +25,7 @@ export class OrderStore {
   async show(id: number): Promise<Order> {
     try {
       const sql = "SELECT * FROM orders WHERE id=($1)";
-      // @ts-ignore
+
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [id]);
@@ -44,7 +42,7 @@ export class OrderStore {
     try {
       const sql =
         "INSERT INTO orders (user_id, status) VALUES($1, $2) RETURNING *";
-      // @ts-ignore
+
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [order.user_id, order.status]);
@@ -63,7 +61,7 @@ export class OrderStore {
     try {
       const sql =
         "UPDATE orders SET user_id=($1), status=($2) WHERE id=($3) RETURNING *";
-      // @ts-ignore
+
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [order.user_id, order.status, id]);
@@ -81,7 +79,7 @@ export class OrderStore {
   async delete(id: number): Promise<Order> {
     try {
       const sql = "DELETE FROM orders WHERE id=($1) RETURNING *";
-      // @ts-ignore
+
       const conn = await Client.connect();
 
       const result = await conn.query(sql, [id]);

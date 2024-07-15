@@ -8,7 +8,7 @@ import {
   ENV,
 } from "./utils/env";
 
-let client;
+let client = new Pool();
 
 if (ENV == "test") {
   client = new Pool({
