@@ -1,5 +1,7 @@
+import jwt from "jsonwebtoken";
 import { Request, Response, Application } from "express";
 import { NewUser, UserStore } from "../models/user";
+import { JWT_SECRET } from "../utils/env";
 
 const store = new UserStore();
 
@@ -37,7 +39,8 @@ const create = async (req: Request, res: Response) => {
       password: password,
     };
     const createdUser = await store.create(newUser);
-    res.json(createdUser);
+    const token = jwt.sign({ user: createdUser }, JWT_SECRET || "");
+    res.json(token);
   } catch (err) {
     res.status(400);
     res.json(err);
